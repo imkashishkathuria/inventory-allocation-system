@@ -1,19 +1,20 @@
 # inventory-allocation-system
-# Mini Grocery Order System
+# Inventory Allocation System
 
 ## Tech Stack
 - Backend: Node.js, Express.js, MongoDB, Mongoose
-- Frontend: React.js (minimal UI)
-- Database: MongoDB (local)
+- Frontend: React.js (minimal)
+- Database: MongoDB
 
 ---
 
 ## Project Structure
 
 backend/
+├── routes/
+│   └── order.routes.js
 ├── controllers/
 │   └── order.controller.js
-│   └── product.controller.js
 ├── services/
 │   └── order.service.js
 ├── repositories/
@@ -22,67 +23,52 @@ backend/
 ├── models/
 │   └── Product.js
 │   └── Order.js
-├── routes/
-│   └── index.js
 ├── config/
 │   └── db.js
-├── seed.js
 ├── server.js
 
 frontend/
 ├── src/
-│   ├── App.js
-│   ├── api.js
-│   └── index.js
+│   └── App.js
 
 ---
 
-## APIs (STRICTLY ONLY 2)
+## API (ONLY ONE)
 
-### 1. GET /products
-- Fetches all products from database
-- Used by frontend to display product list
+### POST /order
 
-### 2. POST /orders
-- Places an order
-- Handles:
-  - Product existence check
-  - Stock validation
-  - Stock deduction
-  - Order creation
-- All logic executed in ONE database transaction
+This single API:
+- Validates product existence
+- Validates stock availability
+- Prevents negative stock
+- Deducts stock
+- Creates order
+- Handles concurrent requests safely
+
+❌ No other APIs are created
+
+---
+
+## Concurrency Handling
+
+MongoDB transactions and atomic stock updates are used.
+This prevents race conditions when multiple orders are placed simultaneously.
+
+---
+
+## Edge Case Handling
+
+If product stock = 5:
+- Order quantity = 3 → SUCCESS
+- Another order quantity = 3 → FAIL
+
+This is handled safely using transactions.
 
 ---
 
 ## Business Logic Location
 
-- Controllers:
-  - Only handle request & response
-- Services:
-  - ALL business logic (stock check, order creation)
-- Repositories:
-  - Database operations only
-- Models:
-  - MongoDB schemas
+- Controllers: Request & response only
+- Services: All validation, stock logic, concurrency handling
+- Repositories: Database operations
 
-❌ No business logic inside controllers  
-❌ No extra APIs created  
-
----
-
-## Transaction Handling
-
-MongoDB sessions are used to ensure:
-- Stock deduction and order creation happen atomically
-- If any step fails, all changes are rolled back
-
----
-
-## Frontend Scope
-
-- Minimal React UI
-- Displays products
-- Places order
-- Shows success or failure message
-
-No UI or design focus as per assignment rules.
