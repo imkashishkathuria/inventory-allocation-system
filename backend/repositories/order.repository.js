@@ -4,4 +4,4 @@ const createOrder = (data, session) => {
   return Order.create([data], { session });
 };
 
-export default createOrder
+export default {createOrder}

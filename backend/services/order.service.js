@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import productRepo from "../repositories/product.repository"
-import orderRepo from "../repositories/order.repository"
+import productRepo from "../repositories/product.repository.js"
+import orderRepo from "../repositories/order.repository.js"
 
 
 const placeOrder = async ({ productId, quantity }) => {

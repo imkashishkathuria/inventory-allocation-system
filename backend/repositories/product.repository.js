@@ -1,4 +1,4 @@
-import Product from "../models/Product";
+import Product from "../models/Product.js";
 
 const deductStock = (productId, qty, session) => {
   return Product.findOneAndUpdate(
@@ -7,4 +7,4 @@ const deductStock = (productId, qty, session) => {
     { new: true, session }
   );
 };
-export default deductStock
+export default {deductStock}
